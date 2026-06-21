@@ -28,6 +28,7 @@ A **Streamlit** application for collecting Reddit posts and comments, built as p
 This tool leverages [PRAW](https://praw.readthedocs.io/) to interact with the Reddit API, enabling researchers to harvest Reddit data with customisable parameters, adaptive rate limiting, and session resumption. Collected data can be downloaded as CSV for offline analysis.
 
 Key capabilities:
+
 - **Reddit API authentication** using client credentials.
 - **Multi-subreddit post collection** with hot, new, top, controversial, and rising sorting.
 - **Optional comment retrieval** with per-post limits.
@@ -57,7 +58,6 @@ Key capabilities:
    git clone https://github.com/gdc0000/DigiPatch_Reddit.git
    cd DigiPatch_Reddit
    ```
-
 2. **(Optional) Create a Virtual Environment**
 
    ```bash
@@ -67,7 +67,6 @@ Key capabilities:
    # macOS / Linux:
    source venv/bin/activate
    ```
-
 3. **Install Dependencies**
 
    ```bash
@@ -83,20 +82,16 @@ Key capabilities:
    ```bash
    streamlit run src/app.py
    ```
-
 2. **Enter Reddit API Credentials** — Provide your Client ID, Client Secret, Username, and Password.
-
 3. **Configure Collection Parameters**
+
    - **Subreddit** — Name of the subreddit to collect from.
    - **Sorting Methods** — One or more of: hot, new, top, controversial, rising.
    - **Post Limit** — Number of posts per sorting method.
    - **Comments** — Optionally enable comment collection with a per-post limit.
    - **Duplicate Removal** — When comments are disabled, optionally deduplicate posts by ID.
-
 4. **Start Collection** — Click **Start/Resume Collection** and monitor progress via the progress bar.
-
 5. **Download** — Preview the first 10 rows and download the full dataset as a CSV file.
-
 6. **Reset** — Use **Clear Data** to start a fresh session.
 
 ---
@@ -133,11 +128,6 @@ Contributions are welcome. Please open an issue or submit a pull request.
 [MIT](LICENSE)
 
 ---
-
-## Contact
-
-**Gabriele Di Cicco, PhD in Social Psychology**  
-[GitHub](https://github.com/gdc0000) · [ORCID](https://orcid.org/0000-0002-1439-5790) · [LinkedIn](https://www.linkedin.com/in/gabriele-di-cicco-124067b0/)
 
 ---
 
