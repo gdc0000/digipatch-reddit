@@ -1,6 +1,12 @@
-# WP4 DigiPatch: Reddit Data Collection App
+# WP4 DigiPatch: Reddit Data Collection
 
-**WP4 DigiPatch: Reddit Data Collection** is a Streamlit-based application designed to collect Reddit posts and comments across multiple subreddits. This tool is built for researchers and analysts who need to harvest Reddit data with customizable collection parameters, adaptive rate limiting, and options for both post- and comment-level data retrieval.
+[![DigiPatch](https://digipatch.eu/wp-content/uploads/2022/09/cropped-digipatch_logo-obrazek512-a.png)](https://digipatch.eu/)
+
+A **Streamlit** application for collecting Reddit posts and comments, built as part of **Work Package 4 (WP4)** of the [DigiPatch](https://digipatch.eu/) research project.
+
+> **DigiPatch** investigates the interaction between psychological needs and digital media use in the social sphere, and processes of identity formation and protection. The project examines how digital media drives cultural change from a traditionally networked society toward a rigidly "patchworked" one, with a focus on socio-cognitive processes and their societal consequences.
+>
+> DigiPatch is funded by the European Union's Horizon 2020 research and innovation programme (Grant Agreement No 101004509) as part of the [CHANSE](https://chanse.org) Collaboration of Humanities and Social Sciences in Europe.
 
 ---
 
@@ -10,8 +16,7 @@
 - [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
-- [File Structure](#file-structure)
-- [Development Container](#development-container)
+- [Project Context](#project-context)
 - [Contributing](#contributing)
 - [License](#license)
 - [Contact](#contact)
@@ -20,39 +25,27 @@
 
 ## Overview
 
-This app leverages the [PRAW](https://praw.readthedocs.io/) library to interact with the Reddit API, allowing you to:
-- Authenticate using your Reddit API credentials.
-- Collect posts from multiple subreddits using various sorting methods (e.g., hot, new, top).
-- Optionally collect comments from each post with flexible retrieval methods (Limit, Range, or Maximum).
-- Manage API rate limiting using an adaptive sleep strategy.
-- Store and resume data collection sessions with Streamlit's session state.
-- Download the collected data as a CSV file for further analysis.
+This tool leverages [PRAW](https://praw.readthedocs.io/) to interact with the Reddit API, enabling researchers to harvest Reddit data with customisable parameters, adaptive rate limiting, and session resumption. Collected data can be downloaded as CSV for offline analysis.
+
+Key capabilities:
+- **Reddit API authentication** using client credentials.
+- **Multi-subreddit post collection** with hot, new, top, controversial, and rising sorting.
+- **Optional comment retrieval** with per-post limits.
+- **Adaptive rate-limit handling** with automatic retries.
+- **Session state persistence** for resumable data collection.
+- **CSV export** of the full dataset.
 
 ---
 
 ## Features
 
-- **Reddit API Integration:**  
-  Authenticate and interact with Reddit using client credentials.
-  
-- **Subreddit Data Collection:**  
-  Specify one or multiple subreddits and choose sorting methods to control data collection.
-  
-- **Customizable Post & Comment Retrieval:**  
-  - Set a limit on the number of posts per subreddit per sorting method.
-  - Optionally collect comments with flexible options (limit, range, or maximum).
-  
-- **Adaptive Rate Limiting:**  
-  Automatically handles rate-limit issues with an adaptive sleep function to retry API calls.
-  
-- **Session Persistence:**  
-  Leverages Streamlit's session state to store collected data and allow resumption of interrupted sessions.
-  
-- **Downloadable Output:**  
-  Download the resulting dataset as a CSV file for offline analysis.
-
-- **Developer-Ready:**  
-  Includes a [devcontainer](.devcontainer/devcontainer.json) configuration to help you quickly set up your development environment using Visual Studio Code or GitHub Codespaces.
+- **Reddit API Integration** — Authenticate and interact with Reddit via PRAW.
+- **Subreddit Data Collection** — Specify a subreddit and choose sorting methods.
+- **Customisable Post & Comment Retrieval** — Set per-subreddit post limits and optional comment collection.
+- **Adaptive Rate Limiting** — Automatic exponential backoff when rate-limited.
+- **Session Persistence** — Streamlit session state stores progress; interruptions can be resumed.
+- **Downloadable Output** — Export results as a CSV file.
+- **Developer-Ready** — Includes a [devcontainer](.devcontainer/devcontainer.json) for VS Code / GitHub Codespaces with Python 3.11 pre-configured.
 
 ---
 
@@ -61,20 +54,21 @@ This app leverages the [PRAW](https://praw.readthedocs.io/) library to interact 
 1. **Clone the Repository**
 
    ```bash
-   git clone https://github.com/yourusername/digipatch-reddit-data-collection.git
-   cd digipatch-reddit-data-collection
+   git clone https://github.com/gdc0000/DigiPatch_Reddit.git
+   cd DigiPatch_Reddit
    ```
 
 2. **(Optional) Create a Virtual Environment**
 
    ```bash
    python -m venv venv
-   source venv/bin/activate  # Windows: venv\Scripts\activate
+   # Windows:
+   .\venv\Scripts\activate
+   # macOS / Linux:
+   source venv/bin/activate
    ```
 
 3. **Install Dependencies**
-
-   All required packages are listed in the [`requirements.txt`](./requirements.txt) file. Install them using:
 
    ```bash
    pip install -r requirements.txt
@@ -84,49 +78,34 @@ This app leverages the [PRAW](https://praw.readthedocs.io/) library to interact 
 
 ## Usage
 
-1. **Run the Streamlit App**
-
-   Launch the application by running:
+1. **Launch the App**
 
    ```bash
-   streamlit run digipatchapp.py
+   streamlit run src/app.py
    ```
 
-2. **Enter Reddit API Credentials**
+2. **Enter Reddit API Credentials** — Provide your Client ID, Client Secret, Username, and Password.
 
-   - Provide your **Client ID**, **Client Secret**, **Username**, and **Password**.
-   - The app will initialize a connection with Reddit using these credentials.
+3. **Configure Collection Parameters**
+   - **Subreddit** — Name of the subreddit to collect from.
+   - **Sorting Methods** — One or more of: hot, new, top, controversial, rising.
+   - **Post Limit** — Number of posts per sorting method.
+   - **Comments** — Optionally enable comment collection with a per-post limit.
+   - **Duplicate Removal** — When comments are disabled, optionally deduplicate posts by ID.
 
-3. **Configure Data Collection Parameters**
+4. **Start Collection** — Click **Start/Resume Collection** and monitor progress via the progress bar.
 
-   - **Subreddits:**  
-     Enter one or more subreddit names (comma-separated).
-     
-   - **Sorting Methods:**  
-     Select from available options (e.g., hot, new, top, controversial, rising).
-     
-   - **Post Limit:**  
-     Choose whether to use a fixed limit or collect the maximum available posts per subreddit per sorting method.
-     
-   - **Comment Collection (Optional):**  
-     Enable comment collection and select your preferred method (Limit, Range, or Maximum). Specify additional parameters as needed.
-     
-   - **Sleep Time:**  
-     Set the number of seconds to wait between API calls to help manage rate limits.
+5. **Download** — Preview the first 10 rows and download the full dataset as a CSV file.
 
-4. **Start or Resume Data Collection**
+6. **Reset** — Use **Clear Data** to start a fresh session.
 
-   Click the **Start/Resume Data Collection** button to begin retrieving data.  
-   - Progress is shown via a progress bar or textual feedback.
-   - Collected data is stored in the session state so you can resume collection if needed.
+---
 
-5. **Download Your Data**
+## Project Context
 
-   Once the collection is complete, preview the data and download it as a CSV file.
+This application is developed within **Work Package 4 (WP4)** of the [DigiPatch](https://digipatch.eu/) project — *Moving from Networked to Patchworked Society*. The project is coordinated by a consortium of European research institutions and funded under the European Union's Horizon 2020 programme (GA No 101004509) through the [CHANSE](https://chanse.org) network.
 
-6. **Clear Collected Data**
-
-   Use the **Clear Collected Data** button to reset the session state if you need to start over.
+For more information about the project, its objectives, and the research team, visit **[https://digipatch.eu/](https://digipatch.eu/)**.
 
 ---
 
@@ -134,47 +113,32 @@ This app leverages the [PRAW](https://praw.readthedocs.io/) library to interact 
 
 ```
 .
-├── digipatchapp.py              # Main Streamlit application for Reddit data collection
-├── requirements.txt             # Required Python packages
-└── .devcontainer
-    └── devcontainer.json        # VS Code/Dev Container configuration for development environments
+├── digipatchapp.py          # Main Streamlit application
+├── requirements.txt         # Python dependencies
+├── DigiPatchLogo.png        # Project logo
+└── .devcontainer/
+    └── devcontainer.json    # VS Code dev container config
 ```
-
----
-
-## Development Container
-
-The repository includes a [devcontainer configuration](.devcontainer/devcontainer.json) that sets up a development environment with:
-- A pre-configured Python 3.11 container.
-- Essential VS Code extensions (Python and Pylance).
-- Automatic package installation based on the `requirements.txt`.
-- A post-attach command that automatically starts the Streamlit app.
-
-This setup is ideal for using Visual Studio Code or GitHub Codespaces to ensure a consistent development environment.
 
 ---
 
 ## Contributing
 
-Contributions are welcome! If you have suggestions, bug fixes, or improvements:
-1. Fork the repository.
-2. Create a new branch for your changes.
-3. Commit and push your modifications.
-4. Open a pull request with a detailed description of your changes.
+Contributions are welcome. Please open an issue or submit a pull request.
 
 ---
 
 ## License
 
-This project is open-source and available under the [MIT License](LICENSE).
+[MIT](LICENSE)
 
 ---
 
 ## Contact
 
 **Gabriele Di Cicco, PhD in Social Psychology**  
-[GitHub](https://github.com/gdc0000) | [ORCID](https://orcid.org/0000-0002-1439-5790) | [LinkedIn](https://www.linkedin.com/in/gabriele-di-cicco-124067b0/)
+[GitHub](https://github.com/gdc0000) · [ORCID](https://orcid.org/0000-0002-1439-5790) · [LinkedIn](https://www.linkedin.com/in/gabriele-di-cicco-124067b0/)
 
 ---
 
-Happy Data Collecting!
+*This project has received funding from the European Union's Horizon 2020 research and innovation programme under grant agreement No 101004509.*
